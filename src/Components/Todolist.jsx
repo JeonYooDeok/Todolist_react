@@ -73,9 +73,9 @@ function Todolist() {
           // - todo: result 배열에서 처리 중인 현재 할 일 항목을 나타냄
 
           // 논리 :
-          // - Math.max(max, parsInt(todo.id)): 콜백 함수 내에서 Math.max는 현재 최대 ID(max)와 현재 할 일 항목의 ID()를 비교하는 데 사용, ParseInt(todo.id)).
-          // - parseInt(todo.id): 현재 할 일 항목의 id 속성을 문자열에서 정수로 변환, ID는 일반적으로 JSON 데이터에 문자열로 저장되기 때문에 이 단계가 필요
-          // - Math.max는 현재 최대 ID(max)를 현재 할 일 항목의 ID(parseInt(todo.id))와 비교하여 두 값 중 더 큰 값을 반환
+          // - Math.max(max, parsInt(todo.id)): 콜백 함수 내에서 Math.max는 현재 최대 ID(max)와 현재 할 일 항목의 ID()를 비교하는 데 사용, Number(todo.id)).
+          // - Number(todo.id): 현재 할 일 항목의 id 속성을 문자열에서 정수로 변환, ID는 일반적으로 JSON 데이터에 문자열로 저장되기 때문에 이 단계가 필요
+          // - Math.max는 현재 최대 ID(max)를 현재 할 일 항목의 ID(Number(todo.id))와 비교하여 두 값 중 더 큰 값을 반환
 
           // 초기값 :
           // - 0: reduce 메소드에 제공되는 초기값, 이는 max 누산기의 초기 값 역할, result 배열이 비어 있거나 할 일 항목의 id 속성 중 정수로 구문 분석할 수 있는 속성이 없는 경우 초기 값 0이 최대 ID로 반환
@@ -128,6 +128,28 @@ function Todolist() {
   //투두리스트 추가 끝//
 
   //완료 여부 수정 시작//
+  const toggleDone = async (id, done) => {
+    try {
+      const response = await fetch(`http://localhost:3000/todos/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ done: !done })
+      });
+      if (response.ok) {
+        setTodoList(
+          todoList.map(item => {
+            if (item.id === id) {
+              return { ...item, done: !done };
+            }
+            return item;
+          })
+        );
+      } else {
+        throw new Error("완료 여부 수정 실패");
+      }
+    } catch (error) {
+      console.error("에러발생", error);
+    }
+  };
   //완료 여부 수정 끝//
 
   //투두리스트 삭제 시작//
@@ -137,10 +159,10 @@ function Todolist() {
         method: "DELETE"
       });
       if (response.ok) {
+        nextId.current = String(Number(nextId.current) - 1);
         // setTodoList(prevTodoList =>
         //   prevTodoList.filter(todo => todo.id !== id)
         // );
-        nextId.current = String(Number(nextId.current) - 1);
         setTodoList(todoList.filter(todo => todo.id !== id));
       } else {
         throw new Error("삭제 실패");
@@ -176,6 +198,7 @@ function Todolist() {
           description={item.description}
           done={item.done}
           order={item.order}
+          onChangeDone={() => toggleDone(item.id, item.done)}
           onDelete={() => deleteTodo(item.id)}
         />
       ))}
