@@ -16,7 +16,7 @@ function Todolist() {
   //투두 제목과 상세설명 인풋값 상태관리 끝//
 
   //아이디 값 관리 시작//
-  const nextId = useRef("1");
+  const nextId = useRef(null);
   //아이디 값 관리 끝
 
   //인풋값 조회 시작//
@@ -58,6 +58,35 @@ function Todolist() {
         const result = await response.json();
         if (response.ok) {
           setTodoList(result);
+          const maxId = result.reduce(
+            (max, todo) => Math.max(max, Number(todo.id)),
+            0
+          );
+          // reduce 메서드 :
+          // - reduce 메서드는 JavaScript의 배열에서 사용할 수 있는 고차 함수
+          // - 이는 배열의 각 요소를 반복하고 콜백 함수에 제공된 논리를 기반으로 단일 값을 누적
+          // - 콜백 함수는 누산기와 현재 처리 중인 값이라는 두 가지 인수를 사용
+
+          // 콜백 기능 :
+          // - (max, todo) => Math.max(max, parsInt(todo.id)): reduce 메소드에 전달되는 콜백 함수, 'max'와 'todo'라는 두 개의 매개변수를 사용
+          // - max: 반복 중에 지금까지 발견된 최대 ID를 저장하는 누산기, 초기값 '0'으로 시작
+          // - todo: result 배열에서 처리 중인 현재 할 일 항목을 나타냄
+
+          // 논리 :
+          // - Math.max(max, parsInt(todo.id)): 콜백 함수 내에서 Math.max는 현재 최대 ID(max)와 현재 할 일 항목의 ID()를 비교하는 데 사용, ParseInt(todo.id)).
+          // - parseInt(todo.id): 현재 할 일 항목의 id 속성을 문자열에서 정수로 변환, ID는 일반적으로 JSON 데이터에 문자열로 저장되기 때문에 이 단계가 필요
+          // - Math.max는 현재 최대 ID(max)를 현재 할 일 항목의 ID(parseInt(todo.id))와 비교하여 두 값 중 더 큰 값을 반환
+
+          // 초기값 :
+          // - 0: reduce 메소드에 제공되는 초기값, 이는 max 누산기의 초기 값 역할, result 배열이 비어 있거나 할 일 항목의 id 속성 중 정수로 구문 분석할 수 있는 속성이 없는 경우 초기 값 0이 최대 ID로 반환
+
+          // 결과 :
+          // - maxId: 이 변수는 reduce 작업의 결과를 저장, 이는 result 배열의 모든 할 일 항목 중에서 발견된 최대 ID
+
+          // 요약 :
+          // reduce 메소드는 할 일 항목의 result 배열을 반복하여 각 할 일 항목의 ID를 비교하고 maxId를 조회
+          // 이 maxId는 나중에 사용할 수 있도록 'maxId' 변수에 저장
+          nextId.current = String(maxId + 1);
         } else {
           throw new Error("투두리스트 불러오기 실패");
         }
@@ -86,7 +115,7 @@ function Todolist() {
       const result = await response.json();
       if (response.ok) {
         // setTodoList(prevTodoList => prevTodoList.concat(result));
-        (nextId.current += 1).toString;
+        nextId.current = String(Number(nextId.current) + 1);
         setTodoList(todoList.concat(result));
         onReset();
       } else {
@@ -98,6 +127,9 @@ function Todolist() {
   };
   //투두리스트 추가 끝//
 
+  //완료 여부 수정 시작//
+  //완료 여부 수정 끝//
+
   //투두리스트 삭제 시작//
   const deleteTodo = async id => {
     try {
@@ -108,6 +140,7 @@ function Todolist() {
         // setTodoList(prevTodoList =>
         //   prevTodoList.filter(todo => todo.id !== id)
         // );
+        nextId.current = String(Number(nextId.current) - 1);
         setTodoList(todoList.filter(todo => todo.id !== id));
       } else {
         throw new Error("삭제 실패");
