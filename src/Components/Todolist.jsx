@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Todoitem from "./Todoitem";
 
 function Todolist() {
@@ -13,8 +13,11 @@ function Todolist() {
     description: ""
   });
   const { title, description } = inputs;
-
   //투두 제목과 상세설명 인풋값 상태관리 끝//
+
+  //아이디 값 관리 시작//
+  const nextId = useRef("1");
+  //아이디 값 관리 끝
 
   //인풋값 조회 시작//
   const onChange = e => {
@@ -24,7 +27,7 @@ function Todolist() {
       [name]: value
     });
   };
-  // input 요소의 변경 이벤트가 발생할 때 호출
+  // 이 함수는 input 요소의 변경 이벤트가 발생할 때 호출
   // 변경 이벤트가 발생하면 e라는 이벤트 객체가 생성
   // 해당 객체에서 target 속성을 통해 이벤트가 발생한 input 요소에 접근
   // e.target을 통해 얻은 input 요소의 name 속성과 value 속성을 추출
@@ -34,8 +37,7 @@ function Todolist() {
   // 변경된 input 요소의 이름과 값을 갖는 새로운 프로퍼티를 추가
   // 이를 통해 기존 상태를 변경하지 않으면서 새로운 상태를 생성하고 업데이트
   // 이렇게 함으로써, input 요소의 값이 변경될 때마다 inputs 상태가 업데이트
-  // 입력된 값들이 실시간으로 반영
-  // 이는 React의 단방향 데이터 흐름 개념을 따르며, 상태를 업데이트할 때마다 UI가 자동으로 다시 렌더링
+  // 입력된 값들이 실시간으로 반영, 상태를 업데이트할 때마다 UI가 자동으로 다시 렌더링
 
   //인풋값 조회 끝//
 
@@ -71,6 +73,7 @@ function Todolist() {
   const addTodo = async () => {
     try {
       const addTodoItem = {
+        id: nextId.current,
         title: inputs.title,
         description: inputs.description,
         done: false,
@@ -83,6 +86,7 @@ function Todolist() {
       const result = await response.json();
       if (response.ok) {
         // setTodoList(prevTodoList => prevTodoList.concat(result));
+        (nextId.current += 1).toString;
         setTodoList(todoList.concat(result));
         onReset();
       } else {
@@ -137,6 +141,7 @@ function Todolist() {
           id={item.id}
           title={item.title}
           description={item.description}
+          done={item.done}
           order={item.order}
           onDelete={() => deleteTodo(item.id)}
         />
