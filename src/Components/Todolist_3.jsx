@@ -1,5 +1,5 @@
 //useReducer를 이용한 상태관리
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useCallback, useEffect, useReducer, useRef } from "react";
 import Todoitem from "./Todoitem";
 
 //useReducer를 통한 상태 관리(초기값 설정) 시작//
@@ -54,15 +54,16 @@ const reducer = (state, action) => {
 };
 //reducer 함수 정의 끝//
 
-function Todolist_2() {
+function Todolist_3() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  //state안에는 initialState의 todoList와 inputs가 들어있음
   //useReducer 훅을 사용하여 상태를 관리
   //reducer 함수를 사용하여 상태를 업데이트
 
-  const { todoList, inputs } = state;
+  const { todoList } = state;
   // state 객체에서 allList와 inputs를 추출하여 변수로 선언
 
-  const { title, description } = inputs;
+  const { title, description } = state.inputs;
   // inputs 객체에서 title과 description을 추출하여 변수로 선언
 
   const nextId = useRef(null);
@@ -70,10 +71,10 @@ function Todolist_2() {
   // nextId.current는 다음에 추가될 할 일 항목의 ID를 추적하는 데 사용
 
   //인풋값 조회 시작//
-  const onChange = e => {
+  const onChange = useCallback(e => {
     const { name, value } = e.target;
     dispatch({ type: "HANDLE_INPUT_CHANGE", payload: { name, value } });
-  };
+  }, []);
   //인풋값 조회 끝
 
   //투두리스트 조회 시작//
@@ -201,7 +202,7 @@ function Todolist_2() {
   );
 }
 
-export default Todolist_2;
+export default Todolist_3;
 
 // 가져오기 요청 중 오류: 첫 번째 catch 블록(catch (error))은 네트워크 오류, 서버 오류 또는 HTTP 생성과 관련된 문제 등 가져오기 요청 중에 발생하는 모든 오류를 포착합니다. 요청 자체.
 // 응답 구문 분석 오류: 두 번째 catch 블록(catch (error))은 await response.json()을 사용하여 응답 본문을 JSON으로 구문 분석하는 동안 발생하는 오류를 포착합니다. 응답 본문이 유효한 JSON이 아니거나 JSON 데이터 구문 분석에 문제가 있는 경우 이런 일이 발생할 수 있습니다.
