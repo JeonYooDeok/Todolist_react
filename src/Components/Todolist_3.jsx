@@ -1,6 +1,7 @@
 //useReducer를 이용한 상태관리
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
 import Todoitem from "./Todoitem";
+import { useModal } from "../Hooks/useModal";
 
 //useReducer를 통한 상태 관리(초기값 설정) 시작//
 const initialState = {
@@ -180,8 +181,11 @@ function Todolist_3() {
   };
   //투두리스트 삭제 끝//
 
+  const { openModal } = useModal();
+
   return (
     <div>
+      <button onClick={() => openModal("caseA")}>모달 열기</button>
       <input
         type="text"
         name="title"
