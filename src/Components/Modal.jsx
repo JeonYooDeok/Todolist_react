@@ -9,7 +9,7 @@ function Modal() {
     <>
       {isOpen && ( // isOpen 상태가 true일 때만 모달 렌더링
         <div>
-          {modalContent === "caseA" && <ModalAddTodo />}
+          {modalContent === "ModalAddTodo" && <ModalAddTodo />}
           <button onClick={closeModal}>취소</button>
         </div>
       )}

@@ -1,13 +1,10 @@
 import React from "react";
-import { useInput } from "../Hooks/useInput";
+import { useTodo } from "../Hooks/useTodo";
 
 function ModalAddTodo() {
-  const { inputs, onChange, onReset } = useInput();
-  const { title, description } = inputs;
-
+  const { title, description, onChange, addTodo } = useTodo();
   return (
     <>
-      <p>ModalAddTodo</p>
       <input
         type="text"
         name="title"
@@ -19,10 +16,10 @@ function ModalAddTodo() {
         type="text"
         name="description"
         value={description}
-        placeholder="제목"
+        placeholder="설명"
         onChange={onChange}
       />
-      <button onClick={onReset}>등록</button>
+      <button onClick={addTodo}>등록</button>
     </>
   );
 }
