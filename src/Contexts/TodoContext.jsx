@@ -4,8 +4,10 @@ import React, {
   useCallback,
   useEffect,
   useReducer,
-  useRef
+  useRef,
+  useState
 } from "react";
+import { useModal } from "../Hooks/useModal";
 
 const TodoContext = createContext();
 
@@ -35,6 +37,16 @@ const reducer = (state, action) => {
         inputs: initialState.inputs, //인풋 초기화
         nextId: String(Number(state.nextId) + 1) //다음 추가될 할 일의 ID 업데이트
       };
+
+    case "MODIFY_TODO":
+      return {
+        ...state,
+        todoList: state.todoList.map(todo =>
+          todo.id === action.payload.id ? { ...todo, ...action.payload } : todo
+        ),
+        inputs: initialState.inputs //인풋 초기화
+      };
+
     case "TOGGLE_DONE": //완료여부 토글 액션
       return {
         ...state,
@@ -62,6 +74,13 @@ const reducer = (state, action) => {
 //reducer 함수 정의 끝//
 
 function TodoProvider({ children }) {
+  const { closeModal } = useModal();
+  const [selectedId, setSelectedId] = useState(null);
+
+  const updateSelectedId = useCallback(id => {
+    setSelectedId(id);
+  }, []);
+
   const [state, dispatch] = useReducer(reducer, initialState);
   //state안에는 initialState의 todoList와 inputs가 들어있음
   //useReducer 훅을 사용하여 상태를 관리
@@ -145,9 +164,37 @@ function TodoProvider({ children }) {
       }
     } catch (error) {
       console.error("에러발생", error);
+    } finally {
+      closeModal();
     }
   };
   //투두리스트 추가 끝
+
+  const modifyTodo = async () => {
+    try {
+      const modifyTodoItem = {
+        title,
+        description
+      };
+      const response = await fetch(
+        `http://localhost:3000/todos/${selectedId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(modifyTodoItem)
+        }
+      );
+      const result = await response.json();
+      if (response.ok) {
+        dispatch({ type: "MODIFY_TODO", payload: result });
+      } else {
+        throw new Error("할 일 수정 실패");
+      }
+    } catch (error) {
+      console.error("에러발생", error);
+    } finally {
+      closeModal();
+    }
+  };
 
   //완료 여부 수정 시작//
   const toggleDone = async id => {
@@ -190,12 +237,15 @@ function TodoProvider({ children }) {
   return (
     <TodoContext.Provider
       value={{
+        selectedId,
         title,
         description,
         todoList,
         onChange,
         fetchTodoList,
         addTodo,
+        updateSelectedId,
+        modifyTodo,
         toggleDone,
         deleteTodo
       }}>

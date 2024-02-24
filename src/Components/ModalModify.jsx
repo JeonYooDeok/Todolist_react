@@ -2,7 +2,7 @@ import React from "react";
 import { useTodo } from "../Hooks/useTodo";
 
 function ModalModify() {
-  const { title, description, onChange } = useTodo();
+  const { title, description, onChange, modifyTodo } = useTodo();
   return (
     <>
       <input
@@ -19,7 +19,7 @@ function ModalModify() {
         placeholder="설명"
         onChange={onChange}
       />
-      <button>수정</button>
+      <button onClick={modifyTodo}>수정</button>
     </>
   );
 }
