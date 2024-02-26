@@ -237,6 +237,7 @@ function TodoProvider({ children }) {
   return (
     <TodoContext.Provider
       value={{
+        initialState,
         selectedId,
         title,
         description,

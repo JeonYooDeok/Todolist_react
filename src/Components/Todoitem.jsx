@@ -4,14 +4,15 @@ import { useTodo } from "../Hooks/useTodo";
 
 function Todoitem(props) {
   const { openModal } = useModal();
-  const { updateSelectedId } = useTodo();
+  const { updateSelectedId, initialState } = useTodo();
 
   const { id, title, description, done, order, onChangeDone, onDelete } = props;
 
   const handleItemClick = () => {
     updateSelectedId(id);
     openModal("ModalModify");
-    console.log(title, description);
+    initialState.inputs.title = title;
+    initialState.inputs.description = description;
   };
 
   return (
