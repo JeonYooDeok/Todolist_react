@@ -38,7 +38,7 @@ const reducer = (state, action) => {
         nextId: String(Number(state.nextId) + 1) //다음 추가될 할 일의 ID 업데이트
       };
 
-    case "MODIFY_TODO":
+    case "MODIFY_TODO": //수정 액션
       return {
         ...state,
         todoList: state.todoList.map(todo =>
@@ -75,11 +75,15 @@ const reducer = (state, action) => {
 
 function TodoProvider({ children }) {
   const { closeModal } = useModal();
+  //모달사용을 위해 모달Context불러오기
+
   const [selectedId, setSelectedId] = useState(null);
+  //투두수정에 사용할 selecteID선언
 
   const updateSelectedId = useCallback(id => {
     setSelectedId(id);
   }, []);
+  //투두수정에 사용할 selecteID상태관리
 
   const [state, dispatch] = useReducer(reducer, initialState);
   //state안에는 initialState의 todoList와 inputs가 들어있음
@@ -170,6 +174,7 @@ function TodoProvider({ children }) {
   };
   //투두리스트 추가 끝
 
+  //투두리스트 수정 시작
   const modifyTodo = async () => {
     try {
       const modifyTodoItem = {
@@ -195,6 +200,7 @@ function TodoProvider({ children }) {
       closeModal();
     }
   };
+  //투두리스트 수정 끝
 
   //완료 여부 수정 시작//
   const toggleDone = async id => {
