@@ -18,3 +18,4 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_TODOLIST_REACT_5CCA0 }}"
           projectId: todolist-react-5cca0
+          channelId: live
