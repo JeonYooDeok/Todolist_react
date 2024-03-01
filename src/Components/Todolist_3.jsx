@@ -13,7 +13,7 @@ function Todolist_3() {
 
   return (
     <div>
-      <button onClick={() => openModal("ModalAddTodo")}>모달 열기</button>
+      <button onClick={() => openModal("ModalAddTodo")}>모달을 열기</button>
 
       {todoList.map(item => (
         <Todoitem
