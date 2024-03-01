@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run : |
+      - run : |        
         echo "VITE_API_KEY=${{secrets.VITE_API_KEY}}" >> .env
         echo "VITE_API_KEY=${{secrets.VITE_AUTH_DOMAIN}}" >> .env
-        echo "VITE_API_KEY=${{secrets.VITE_VITE_PROJECT_ID}}" >> .env
-        echo "VITE_API_KEY=${{secrets.VITE_VITE_STORAGE_BUCKET}}" >> .env
-        echo "VITE_API_KEY=${{secrets.VITE_VITE_APP_ID}}" >> .env
+        echo "VITE_API_KEY=${{secrets.VITE_PROJECT_ID}}" >> .env
+        echo "VITE_API_KEY=${{secrets.VITE_STORAGE_BUCKET}}" >> .env
+        echo "VITE_API_KEY=${{secrets.VITE_APP_ID}}" >> .env 
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
