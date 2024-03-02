@@ -5,6 +5,7 @@ function ModalAddTodo() {
   const { title, description, onChange, addTodo } = useTodo();
   return (
     <>
+      <h1>할 일 등록</h1>
       <input
         type="text"
         name="title"
