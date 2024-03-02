@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { authService } from "../firebase";
 
 function ModalLogin() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const formAction = async e => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    await signInWithEmailAndPassword(authService, email, password);
+  };
+
+  onAuthStateChanged(authService, setCurrentUser);
+  console.log(currentUser);
   return (
     <>
       <h1>로그인</h1>
-      <input
-        type="text"
-        placeholder="아이디 입력"
-      />
-      <textarea
-        type="text"
-        placeholder="비밀번호 입력"
-      />
-      <button>로그인</button>
+      <form onSubmit={formAction}>
+        <input
+          type="text"
+          name="email"
+        />
+        <input
+          type="password"
+          name="password"
+        />
+        <button>로그인</button>
+      </form>
     </>
   );
 }
