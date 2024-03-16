@@ -1,18 +1,3 @@
 {
-  "todos": [
-    {
-      "id": "2",
-      "title": "여긴제목",
-      "description": "여긴설명",
-      "done": false,
-      "order": 2
-    },
-    {
-      "id": "3",
-      "title": "ㅍㅍ",
-      "description": "ㅠㅠ",
-      "done": false,
-      "order": 2
-    }
-  ]
+  "todos": []
 }

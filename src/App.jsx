@@ -1,38 +1,30 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  BrowserRouter
-} from "react-router-dom";
-import Header from "./Components/Header";
-import Home from "./Components/Home";
-import Modal from "./Components/Modal";
-import { ModalProvider } from "./Contexts/ModalContext";
-import { TodoProvider } from "./Contexts/TodoContext";
-import Todolist_3 from "./Components/Todolist_3";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
+import TodoList from "./Pages/TodoList";
+import { CurrentUserProvider } from "./Contexts/CurrentUserContext";
 
 function App() {
   return (
-    <ModalProvider>
-      <TodoProvider>
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={<Home />}
-            />
-            <Route
-              path="/Todolist_3"
-              element={<Todolist_3 />}
-            />
-          </Routes>
-          <Modal />
-        </BrowserRouter>
-      </TodoProvider>
-    </ModalProvider>
+    <CurrentUserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<Login />}
+          />
+          <Route
+            path="/SignUp"
+            element={<SignUp />}
+          />
+          <Route
+            path="/TodoList"
+            element={<TodoList />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </CurrentUserProvider>
   );
 }
 

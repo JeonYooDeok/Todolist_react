@@ -1,9 +1,10 @@
-import React from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import React from "react";
 import { authService } from "../firebase";
+import { Link } from "react-router-dom";
 
-function ModalSignIn() {
-  const formAction = async e => {
+function SignUp() {
+  const signUp = async e => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -12,11 +13,10 @@ function ModalSignIn() {
 
     await createUserWithEmailAndPassword(authService, email, password);
   };
-
   return (
-    <>
+    <div>
       <h1>회원가입</h1>
-      <form onSubmit={formAction}>
+      <form onSubmit={signUp}>
         <input
           type="text"
           name="email"
@@ -27,8 +27,9 @@ function ModalSignIn() {
         />
         <button>회원가입</button>
       </form>
-    </>
+      <Link to="/">로그인</Link>
+    </div>
   );
 }
 
-export default ModalSignIn;
+export default SignUp;

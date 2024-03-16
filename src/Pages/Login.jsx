@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React from "react";
 import { authService } from "../firebase";
+import { useCurrentUser } from "../Hooks/useCurrentUser";
+import { Link, useNavigate } from "react-router-dom";
 
-function ModalLogin() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const formAction = async e => {
+function Login() {
+  const { onAuthStateChanged } = useCurrentUser();
+  const navigate = useNavigate();
+
+  const logIn = async e => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -12,14 +16,14 @@ function ModalLogin() {
     const password = formData.get("password");
 
     await signInWithEmailAndPassword(authService, email, password);
+    onAuthStateChanged;
+    navigate("/TodoList");
   };
 
-  onAuthStateChanged(authService, setCurrentUser);
-  console.log(currentUser);
   return (
-    <>
+    <div>
       <h1>로그인</h1>
-      <form onSubmit={formAction}>
+      <form onSubmit={logIn}>
         <input
           type="text"
           name="email"
@@ -30,8 +34,9 @@ function ModalLogin() {
         />
         <button>로그인</button>
       </form>
-    </>
+      <Link to="/SignUp">회원가입</Link>
+    </div>
   );
 }
 
-export default ModalLogin;
+export default Login;
