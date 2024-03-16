@@ -27,10 +27,12 @@ function Login() {
         <input
           type="text"
           name="email"
+          placeholder="이메일 입력"
         />
         <input
           type="password"
           name="password"
+          placeholder="비밀번호 입력"
         />
         <button>로그인</button>
       </form>
